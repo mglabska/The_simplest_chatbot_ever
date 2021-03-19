@@ -34,18 +34,24 @@ def get_service() -> int:
             service_number = input('Wpisz cyfrę od 1 do 5.')
 
 
-# TODO Ask for preferred date and hours (check date format, check holidays and times already taken).
+# Ask for preferred date and hours (check date format, check holidays and current year).
 def get_time():
-    date_pattern = re.compile(r'2020-\d{2}-\d{2}')
+    date_pattern = re.compile(r'\d{4}-\d{2}-\d{2}')
     time_pattern = re.compile(r'\d{2}:\d{2}')
-    date = input('Podaj dzień wizyty w formacie rrrr-mm-dd (np.: 2021-09-02).\n')
+    pl_holidays = holidays.Poland()
+    date = input(
+        'Podaj dzień wizyty w formacie rrrr-mm-dd (np.: 2021-09-02). Przyjmujemy zapisy tylko na bieżący rok.\n')
     while date_pattern.match(date) is None:
         date = input('Wymagany format daty: rrrr-mm-dd.\n')
+    while date[0:4] != str(datetime.datetime.now().year):
+        date = input('Prosimy podać bieżący rok.\n')
+        while date in pl_holidays:
+            date = input('To dzień świąteczny. Prosimy podać inną datę.\n')
     time = input('Podaj godzinę wizyty w formacie gg:mm (np. 12:09).\n')
     while time_pattern.match(time) is None:
         time = input('Wymagany format godziny: gg:mm.\n')
     if date_pattern.match(date) is not None and time_pattern.match(time) is not None:
-        return date, time
+        return datetime.datetime.strptime(date + ' ' + time, '%Y-%m-%d %H:%M')
 
 
 # Ask for names.

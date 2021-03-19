@@ -2,3 +2,5 @@
 /shelf/
 /workspace.xml
 .idea/
+main.py
+visits.csv
