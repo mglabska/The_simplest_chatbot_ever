@@ -20,7 +20,7 @@ class Service(Enum):
 
 # Say 'Hello'
 def say_hello():
-    return 'Dzień dobry, miło Cię widzieć!'
+    print('Dzień dobry, miło Cię widzieć!\n')
 
 
 # Ask for service (1, 2, 3, 4, 5) and get the service number from the user, check correctness. Service(1).name
@@ -34,22 +34,30 @@ def get_service() -> int:
             service_number = input('Wpisz cyfrę od 1 do 5.')
 
 
-# Ask for preferred date and hours (check date format, check holidays and current year).
+# Ask for preferred date and hours (check date and time format, check holidays and current year).
 def get_time():
-    date_pattern = re.compile(r'\d{4}-\d{2}-\d{2}')
-    time_pattern = re.compile(r'\d{2}:\d{2}')
+    date_pattern = re.compile(r'\d{4}-[0-1][0-9]-[0-3][0-9]')
+    time_pattern = re.compile(r'^([0-9][0-9]):00')
     pl_holidays = holidays.Poland()
     date = input(
         'Podaj dzień wizyty w formacie rrrr-mm-dd (np.: 2021-09-02). Przyjmujemy zapisy tylko na bieżący rok.\n')
     while date_pattern.match(date) is None:
-        date = input('Wymagany format daty: rrrr-mm-dd.\n')
-    while date[0:4] != str(datetime.datetime.now().year):
-        date = input('Prosimy podać bieżący rok.\n')
-        while date in pl_holidays:
-            date = input('To dzień świąteczny. Prosimy podać inną datę.\n')
-    time = input('Podaj godzinę wizyty w formacie gg:mm (np. 12:09).\n')
-    while time_pattern.match(time) is None:
-        time = input('Wymagany format godziny: gg:mm.\n')
+        date = input('Wymagany format daty: rrrr-mm-dd. Wpisz datę jeszcze raz.\n')
+    try:
+        while datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10])) < datetime.datetime.now():
+            date = input('Podaj datę przypadającą w przyszłości (jutro lub później).\n')
+        while date[0:4] != str(datetime.datetime.now().year):
+            date = input('Podaj bieżący rok.\n')
+            while date in pl_holidays:
+                date = input('To dzień świąteczny. Podaj inną datę.\n')
+    except ValueError:
+        date = input('Ta data nie istnieje. Podaj prawdziwą datę.\n')
+    time = input(
+        'Podaj godzinę wizyty w formacie gg:mm (np. 12:00).\nZapisujemy tylko na pełne godziny od 9:00 do 18:00.\n')
+    while time_pattern.match(time) is None or int(time[0:2]) not in range(9, 19):
+        time = input(
+            'Wymagany format godziny: gg:mm. Zapisujemy tylko na pełne godziny (gg:00) między 9:00 a 18:00.\n'
+            'Wpisz godzinę jeszcze raz.\n')
     if date_pattern.match(date) is not None and time_pattern.match(time) is not None:
         return datetime.datetime.strptime(date + ' ' + time, '%Y-%m-%d %H:%M')
 
@@ -68,7 +76,7 @@ def get_number():
         if pattern.match(number) is not None:
             return number
         else:
-            number = input('Numer musi być w formacie +48123456789.\n')
+            number = input('Numer musi być w formacie +48123456789. Wpisz numer jeszcze raz.\n')
 
 
 # Create the main function:
@@ -89,10 +97,17 @@ def main():
     with open(filename, 'a', newline='') as csvfile:
         visit_writer = csv.writer(csvfile, delimiter='\t', quoting=csv.QUOTE_MINIMAL)
         visit_writer.writerow([service, time, name, number])
-    return 'Dziękuję, wszystkie dane zostały zapisane!'
+    print(
+        f'Zapisano następujące dane:\n'
+        f'usługa: {service}\n'
+        f'termin: {time}\n'
+        f'imię i nazwisko: {name}\n'
+        f'numer telefonu: {number}\n'
+        f'Dziękuję!'
+    )
 
 
 # Run program
 if __name__ == '__main__':
-    print(say_hello())
-    print(main())
+    say_hello()
+    main()
