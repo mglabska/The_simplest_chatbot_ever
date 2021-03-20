@@ -39,27 +39,28 @@ def get_time():
     date_pattern = re.compile(r'\d{4}-[0-1][0-9]-[0-3][0-9]')
     time_pattern = re.compile(r'^([0-9][0-9]):00')
     pl_holidays = holidays.Poland()
-    date = input(
-        'Podaj dzień wizyty w formacie rrrr-mm-dd (np.: 2021-09-02). Przyjmujemy zapisy tylko na bieżący rok.\n')
-    while date_pattern.match(date) is None:
-        date = input('Wymagany format daty: rrrr-mm-dd. Wpisz datę jeszcze raz.\n')
     try:
+        date = input(
+            'Podaj dzień wizyty w formacie rrrr-mm-dd (np.: 2021-09-02). Przyjmujemy zapisy tylko na bieżący rok.\n')
+        while date_pattern.match(date) is None:
+            date = input('Wymagany format daty: rrrr-mm-dd. Wpisz datę jeszcze raz.\n')
         while datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10])) < datetime.datetime.now():
             date = input('Podaj datę przypadającą w przyszłości (jutro lub później).\n')
         while date[0:4] != str(datetime.datetime.now().year):
             date = input('Podaj bieżący rok.\n')
             while date in pl_holidays:
                 date = input('To dzień świąteczny. Podaj inną datę.\n')
-    except ValueError:
-        date = input('Ta data nie istnieje. Podaj prawdziwą datę.\n')
-    time = input(
-        'Podaj godzinę wizyty w formacie gg:mm (np. 12:00).\nZapisujemy tylko na pełne godziny od 9:00 do 18:00.\n')
-    while time_pattern.match(time) is None or int(time[0:2]) not in range(9, 19):
         time = input(
-            'Wymagany format godziny: gg:mm. Zapisujemy tylko na pełne godziny (gg:00) między 9:00 a 18:00.\n'
-            'Wpisz godzinę jeszcze raz.\n')
-    if date_pattern.match(date) is not None and time_pattern.match(time) is not None:
-        return datetime.datetime.strptime(date + ' ' + time, '%Y-%m-%d %H:%M')
+            'Podaj godzinę wizyty w formacie gg:mm (np. 12:00).\nZapisujemy tylko na pełne godziny od 09:00 do 18:00.\n')
+        while time_pattern.match(time) is None or int(time[0:2]) not in range(9, 19):
+            time = input(
+                'Wymagany format godziny: gg:mm. Zapisujemy tylko na pełne godziny (gg:00) między 09:00 a 18:00.\n'
+                'Wpisz godzinę jeszcze raz.\n')
+        if date_pattern.match(date) is not None and time_pattern.match(time) is not None:
+            return datetime.datetime.strptime(date + ' ' + time, '%Y-%m-%d %H:%M')
+    except ValueError:
+        print('Ta data nie istnieje.\n')
+        get_time()
 
 
 # Ask for names.
