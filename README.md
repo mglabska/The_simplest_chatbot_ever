@@ -5,7 +5,7 @@ Aby uruchomić program, należy z poziomu folderu, w którym zapisano program, w
 
 Program służy do umawiania wizyt w salonie fryzjerskim. Pobiera od użytkownika:
 1. kod wybranej usługi,
-2. preferowany termin (datę i godzinę) w danym roku kalendarzowym, z wyłączeniem oficjalnych świąt (w przedziale godzinowym od 9:00 do 18:00, zapisy są przyjmowane o pełnych godzinach),
+2. preferowany termin (datę i godzinę) w danym roku kalendarzowym, z wyłączeniem świąt państwowych (w przedziale godzinowym od 9:00 do 18:00, zapisy są przyjmowane o pełnych godzinach),
 3. imię i nazwisko,
 4. numer kontaktowy.
 
