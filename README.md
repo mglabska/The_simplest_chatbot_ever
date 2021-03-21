@@ -3,6 +3,7 @@
 Program chatbot.py wymaga instalacji środowiska języka Python (w wersji 3.6 lub nowszej). Przed uruchomieniem programu należy zainstalować bibliotekę holidays (komendą: pip install holidays lub: pip3 install holidays).
 Aby uruchomić program, należy z poziomu folderu, w którym zapisano program, wpisać w wierszu poleceń komendę: python chatbot.py (lub: python3 chatbot.py).
 
+
 Program służy do umawiania wizyt w salonie fryzjerskim. Pobiera od użytkownika:
 1. kod wybranej usługi,
 2. preferowany termin (datę i godzinę) w danym roku kalendarzowym, z wyłączeniem świąt państwowych (w przedziale godzinowym od 9:00 do 18:00, zapisy są przyjmowane o pełnych godzinach),
